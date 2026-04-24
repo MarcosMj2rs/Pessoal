@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+
+  contacorrente-api:
+    build:
+      context: .
+      dockerfile: src/Services/ContaCorrente/ContaCorrente.API/Dockerfile
+    container_name: contacorrente-api
+    ports:
+      - "7001:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Data Source=/data/contacorrente.db
+      - Jwt__Key=sua-chave-jwt-aqui
+    volumes:
+      - contacorrente-data:/data
+
+  transferencia-api:
+    build:
+      context: .
+      dockerfile: src/Services/Transferencia/Transferencia.API/Dockerfile
+    container_name: transferencia-api
+    ports:
+      - "7002:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Data Source=/data/transferencia.db
+      - Jwt__Key=12345678901234567890123456789012_BANKMORETEST
+      - Services__ContaCorrente__BaseUrl=http://contacorrente-api
+    volumes:
+      - transferencia-data:/data
+    depends_on:
+      - contacorrente-api
+
+volumes:
+  contacorrente-data:
+  transferencia-data:

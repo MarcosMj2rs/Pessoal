@@ -1,0 +1,33 @@
+<Solution>
+  <Folder Name="/k8s/">
+    <File Path="contacorrente-deployment.yaml" />
+    <File Path="contacorrente-pvc.yaml" />
+    <File Path="docker-compose.yaml" />
+    <File Path="jwt-secret.yaml" />
+    <File Path="transferencia-deployment.yaml" />
+    <File Path="transferencia-pvc.yaml" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+  </Folder>
+  <Folder Name="/src/" />
+  <Folder Name="/src/BuildingBlocks/">
+    <Project Path="src/BuildingBlocks/EventBus/EventBus.csproj" />
+    <Project Path="src/BuildingBlocks/SharedKernel/SharedKernel.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/" />
+  <Folder Name="/src/Services/ContaCorrente/">
+    <Project Path="src/Services/ContaCorrente/ContaCorrente.API/ContaCorrente.API.csproj" />
+    <Project Path="src/Services/ContaCorrente/ContaCorrente.Application/ContaCorrente.Application.csproj" />
+    <Project Path="src/Services/ContaCorrente/ContaCorrente.Domain/ContaCorrente.Domain.csproj" />
+    <Project Path="src/Services/ContaCorrente/ContaCorrente.Infrastructure/ContaCorrente.Infrastructure.csproj" />
+    <Project Path="src/Services/ContaCorrente/ContaCorrente.Tests/ContaCorrente.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/Transferencia/">
+    <Project Path="src/Services/Transferencia/Transferencia.API/Transferencia.API.csproj" />
+    <Project Path="src/Services/Transferencia/Transferencia.Application/Transferencia.Application.csproj" />
+    <Project Path="src/Services/Transferencia/Transferencia.Domain/Transferencia.Domain.csproj" />
+    <Project Path="src/Services/Transferencia/Transferencia.Infrastructure/Transferencia.Infrastructure.csproj" />
+    <Project Path="src/Services/Transferencia/Transferencia.Tests/Transferencia.Tests.csproj" />
+  </Folder>
+</Solution>

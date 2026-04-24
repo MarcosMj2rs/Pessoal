@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contacorrente-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: contacorrente-api
+  template:
+    metadata:
+      labels:
+        app: contacorrente-api
+    spec:
+      containers:
+        - name: contacorrente-api
+          image: contacorrente-api:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Production"
+            - name: ConnectionStrings__DefaultConnection
+              value: "Data Source=/data/contacorrente.db"
+            - name: Jwt__Key
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: key
+          volumeMounts:
+            - name: sqlite-data
+              mountPath: /data
+      volumes:
+        - name: sqlite-data
+          persistentVolumeClaim:
+            claimName: contacorrente-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: contacorrente-api
+spec:
+  selector:
+    app: contacorrente-api
+  ports:
+    - port: 80
+      targetPort: 8080

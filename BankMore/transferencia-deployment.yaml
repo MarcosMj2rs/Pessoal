@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transferencia-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: transferencia-api
+  template:
+    metadata:
+      labels:
+        app: transferencia-api
+    spec:
+      containers:
+        - name: transferencia-api
+          image: transferencia-api:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Production"
+            - name: ConnectionStrings__DefaultConnection
+              value: "Data Source=/data/transferencia.db"
+            - name: Jwt__Key
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: key
+            - name: Services__ContaCorrente__BaseUrl
+              value: "http://contacorrente-api"
+          volumeMounts:
+            - name: sqlite-data
+              mountPath: /data
+      volumes:
+        - name: sqlite-data
+          persistentVolumeClaim:
+            claimName: transferencia-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transferencia-api
+spec:
+  selector:
+    app: transferencia-api
+  ports:
+    - port: 80
+      targetPort: 8080
