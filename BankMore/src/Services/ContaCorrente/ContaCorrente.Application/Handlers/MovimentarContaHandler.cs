@@ -50,7 +50,8 @@ namespace ContaCorrente.Application.Handlers
 
             var conseguiuProcessar = await _idempotenciaRepository.TentarRegistrarAsync(
                 request.RequisicaoId,
-                JsonSerializer.Serialize(request)
+                JsonSerializer.Serialize(request),
+                tipo
             );
 
             if (!conseguiuProcessar)

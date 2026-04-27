@@ -1,7 +1,6 @@
 using ContaCorrente.API.Middlewares;
 using ContaCorrente.Application.Interfaces;
 using ContaCorrente.Domain.Interfaces;
-using ContaCorrente.Infrastructure.Persistence;
 using ContaCorrente.Infrastructure.Repositories;
 using ContaCorrente.Infrastructure.Secutity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

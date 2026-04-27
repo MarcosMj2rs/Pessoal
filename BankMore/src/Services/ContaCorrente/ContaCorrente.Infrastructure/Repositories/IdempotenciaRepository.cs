@@ -1,5 +1,4 @@
 ﻿using ContaCorrente.Application.Interfaces;
-using ContaCorrente.Infrastructure.Persistence;
 using Dapper;
 using Microsoft.Data.Sqlite;
 
@@ -12,21 +11,31 @@ public class IdempotenciaRepository : IIdempotenciaRepository
         _connectionFactory = connectionFactory;
     }
 
-    public async Task<bool> TentarRegistrarAsync(string chave, string requisicao)
+    public async Task<bool> TentarRegistrarAsync(string chave, string requisicao, string tipoMovimento)
     {
         using var connection = _connectionFactory.CreateConnection();
 
-        var sql = @"INSERT INTO idempotencia
-                    (chave_idempotencia, requisicao, data)
-                    VALUES (@Chave, @Requisicao, @Data)";
+        var sql = @"INSERT INTO idempotencia (chave_idempotencia,
+                                              tipo_movimento,
+                                              requisicao,
+                                              data,
+                                              resultado
+                                             )
+                    VALUES (@Chave,
+                            @TipoMovimento,
+                            @Requisicao,
+                            @Data,
+                            @Resultado)";
 
         try
         {
             await connection.ExecuteAsync(sql, new
             {
                 Chave = chave.ToString(),
+                TipoMovimento = tipoMovimento,
                 Requisicao = requisicao,
-                Data = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
+                Data = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"),
+                Resultado ="TRANSITORIO" 
             });
 
             return true;

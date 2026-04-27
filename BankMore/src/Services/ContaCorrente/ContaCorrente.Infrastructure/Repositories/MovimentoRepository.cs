@@ -1,6 +1,5 @@
 ﻿using ContaCorrente.Application.Interfaces;
 using ContaCorrente.Domain.Entities;
-using ContaCorrente.Infrastructure.Persistence;
 using Dapper;
 
 namespace ContaCorrente.Infrastructure.Repositories

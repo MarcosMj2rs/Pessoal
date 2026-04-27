@@ -2,8 +2,6 @@
 using Microsoft.Data.Sqlite;
 using System.Data;
 
-namespace ContaCorrente.Infrastructure.Persistence;
-
 public class DbConnectionFactory : IDbConnectionFactory
 {
     private readonly string _connectionString;
@@ -13,5 +11,10 @@ public class DbConnectionFactory : IDbConnectionFactory
         _connectionString = connectionString;
     }
 
-    public IDbConnection CreateConnection() => new SqliteConnection(_connectionString);
+    public IDbConnection CreateConnection()
+    {
+        var connection = new SqliteConnection(_connectionString);
+        connection.Open();
+        return connection;
+    }
 }

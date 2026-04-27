@@ -1,5 +1,7 @@
-﻿using MediatR;
+﻿using ContaCorrente.Application.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Http;
+using System.Text.Json;
 using Transferencia.Application.Commands;
 using Transferencia.Application.Interfaces;
 

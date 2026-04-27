@@ -20,30 +20,38 @@ namespace Transferencia.Infrastructure.Repositories
 
             using var connection = _connectionFactory.CreateConnection();
 
-            var sql = @"INSERT INTO transferencia
-                        (
-                            idtransferencia,
-                            idcontacorrente_origem,
-                            idcontacorrente_destino,
-                            datamovimento,
-                            valor
-                        )
-                        VALUES
-                        (
-                            @RequisicaoId,
-                            @NumeroContaDestino,
-                            @NumeroContaOrigem,
-                            @Data,
-                            @Valor
-                        )";
+            var sqlBusca = @"SELECT idcontacorrente FROM contacorrente WHERE numero = @Numero";
 
-            await connection.ExecuteAsync(sql, new
+            var idContaOrigem = await connection.QueryFirstOrDefaultAsync<string>(sqlBusca, new { Numero = command.NumeroContaOrigem });
+            var idContaDestino = await connection.QueryFirstOrDefaultAsync<string>(sqlBusca, new { Numero = command.NumeroContaDestino });
+
+            if (idContaOrigem is null || idContaDestino is null)
+                throw new InvalidOperationException("Conta origem ou destino não encontrada.");
+
+            var sqlInsert = @$"INSERT INTO transferencia
+                              (
+                                  idtransferencia,
+                                  idcontacorrente_origem,
+                                  idcontacorrente_destino,
+                                  datamovimento,
+                                  valor
+                              )
+                              VALUES
+                              (
+                                  @RequisicaoId,
+                                  @IdContaOrigem,
+                                  @IdContaDestino,
+                                  @Data,
+                                  @Valor
+                              );";
+
+            await connection.ExecuteAsync(sqlInsert, new
             {
-                Id = command.RequisicaoId.ToString(),
-                ContaDestino = command.NumeroContaDestino,
-                ContaOrigem = command.NumeroContaOrigem,
-                Valor = command.Valor,
-                Data = command.Data
+                RequisicaoId = command.RequisicaoId.ToString(),
+                IdContaOrigem = idContaOrigem,
+                IdContaDestino = idContaDestino,
+                Data = command.Data,
+                Valor = command.Valor
             });
         }
     }

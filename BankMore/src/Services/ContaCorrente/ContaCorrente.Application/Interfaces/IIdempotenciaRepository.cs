@@ -2,7 +2,7 @@
 {
     public interface IIdempotenciaRepository
     {
-        Task<bool> TentarRegistrarAsync(string chave, string requisicao);
+        Task<bool> TentarRegistrarAsync(string chave, string requisicao, string tipoMovimento);
 
         Task AtualizarResultadoAsync(string chave, string resultado);
     }
