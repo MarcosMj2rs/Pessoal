@@ -14,4 +14,4 @@ RUN dotnet publish "src/Services/ContaCorrente/ContaCorrente.API/ContaCorrente.A
 FROM base AS final
 WORKDIR /app
 COPY --from=build /app/publish .
-ENTRYPOINT ["dotnet", "ContaCorrente.API.dll"]
+ENTRYPOINT ["dotnet", "ContaCorrente.API.dll"] A

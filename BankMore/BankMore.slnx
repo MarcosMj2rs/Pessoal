@@ -1,12 +1,4 @@
 <Solution>
-  <Folder Name="/k8s/">
-    <File Path="contacorrente-deployment.yaml" />
-    <File Path="contacorrente-pvc.yaml" />
-    <File Path="docker-compose.yaml" />
-    <File Path="jwt-secret.yaml" />
-    <File Path="transferencia-deployment.yaml" />
-    <File Path="transferencia-pvc.yaml" />
-  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".gitignore" />
     <File Path="README.md" />
