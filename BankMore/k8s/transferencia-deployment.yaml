@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transferencia
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: transferencia
+  template:
+    metadata:
+      labels:
+        app: transferencia
+    spec:
+      containers:
+        - name: transferencia
+          image: mj2rsdockerpass/transferencia:latest
+          ports:
+            - containerPort: 80

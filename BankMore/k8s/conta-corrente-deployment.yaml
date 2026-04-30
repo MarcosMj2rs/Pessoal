@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conta-corrente
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: conta-corrente
+  template:
+    metadata:
+      labels:
+        app: conta-corrente
+    spec:
+      containers:
+        - name: conta-corrente
+          image: mj2rsdockerpass/conta-corrente:latest
+          ports:
+            - containerPort: 80

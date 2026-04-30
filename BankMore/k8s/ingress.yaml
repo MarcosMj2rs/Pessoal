@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bankmore-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: bankmore.local
+      http:
+        paths:
+          - path: /conta
+            pathType: Prefix
+            backend:
+              service:
+                name: conta-corrente-service
+                port:
+                  number: 80
+
+          - path: /transferencia
+            pathType: Prefix
+            backend:
+              service:
+                name: transferencia-service
+                port:
+                  number: 80
