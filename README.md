@@ -6,6 +6,7 @@ BankMore é uma plataforma financeira baseada em microsserviços, desenvolvida c
 
 ## Arquitetura
 
+```
 BankMore/
 ├── src/
 │   └── Services/
@@ -20,63 +21,66 @@ BankMore/
 ├── k8s/
 ├── docker-compose.yaml
 └── BankMore.sln
+```
 
 ---
 
 ## Microsserviços
 
 ### API Conta Corrente
+
 Responsável pelo cadastro, autenticação e operações financeiras da conta corrente.
 
-| Endpoint | Método | Descrição |
-|---|---|---|
-| `/api/contacorrente/cadastrar` | POST | Cadastra uma nova conta corrente |
-| `/api/contacorrente/login` | POST | Autentica e retorna token JWT |
-| `/api/contacorrente/inativar` | PATCH | Inativa uma conta corrente |
-| `/api/contacorrente/movimentar` | POST | Realiza débito ou crédito |
-| `/api/contacorrente/saldo` | GET | Consulta o saldo atual |
+| Endpoint                        | Método | Descrição                        |
+| ------------------------------- | ------ | -------------------------------- |
+| `/api/contacorrente/cadastrar`  | POST   | Cadastra uma nova conta corrente |
+| `/api/contacorrente/login`      | POST   | Autentica e retorna token JWT    |
+| `/api/contacorrente/inativar`   | PATCH  | Inativa uma conta corrente       |
+| `/api/contacorrente/movimentar` | POST   | Realiza débito ou crédito        |
+| `/api/contacorrente/saldo`      | GET    | Consulta o saldo atual           |
 
 ### API Transferência
+
 Responsável pela transferência de valores entre contas da mesma instituição.
 
-| Endpoint | Método | Descrição |
-|---|---|---|
-| `/api/transferencia` | POST | Realiza transferência entre contas |
+| Endpoint             | Método | Descrição                          |
+| -------------------- | ------ | ---------------------------------- |
+| `/api/transferencia` | POST   | Realiza transferência entre contas |
 
 ---
 
 ## Tecnologias Utilizadas
 
-| Tecnologia | Finalidade |
-|---|---|
-| .NET 8 | Framework principal |
-| Dapper | Acesso ao banco de dados |
-| MediatR | Padrão Mediator / CQRS |
-| SQLite | Banco de dados |
+| Tecnologia   | Finalidade                 |
+| ------------ | -------------------------- |
+| .NET 8       | Framework principal        |
+| Dapper       | Acesso ao banco de dados   |
+| MediatR      | Padrão Mediator / CQRS     |
+| SQLite       | Banco de dados             |
 | JWT (Bearer) | Autenticação e autorização |
-| Swagger | Documentação das APIs |
-| Docker | Containerização |
-| Kubernetes | Orquestração (produção) |
+| Swagger      | Documentação das APIs      |
+| Docker       | Containerização            |
+| Kubernetes   | Orquestração (produção)    |
 
 ---
 
 ## Padrões e Decisões Técnicas
 
-- **DDD** — Cada microsserviço possui camadas bem definidas: API, Application e Infrastructure
-- **CQRS** — Separação entre comandos (escrita) e queries (leitura) via MediatR
-- **Idempotência** — Todas as requisições de movimentação e transferência são idempotentes via `requisicaoId`
-- **JWT** — Todos os endpoints são protegidos, nenhum pode ser acessado sem token válido
-- **Isolamento de dados** — Dados sensíveis como CPF trafegam apenas dentro do microsserviço de Conta Corrente
-- **Resiliência** — Transferências possuem mecanismo de estorno automático em caso de falha
+* **DDD** — Camadas separadas por responsabilidade
+* **CQRS** — Separação de comandos e queries
+* **Idempotência** — Uso de `requisicaoId` para evitar duplicidade
+* **JWT** — Autenticação via token
+* **Isolamento de dados** — Dados sensíveis não trafegam entre microsserviços
+* **Resiliência** — Estorno automático em falhas de transferência
 
 ---
 
 ## Segurança
 
-- Autenticação via **JWT Bearer Token** em todos os endpoints
-- Senhas armazenadas com **hash BCrypt**
-- CPF e dados sensíveis **não transitam** entre microsserviços
-- Token contém apenas a identificação da conta corrente
+* JWT em todos os endpoints
+* Hash BCrypt para senhas
+* CPF isolado no microsserviço de origem
+* Token com dados mínimos
 
 ---
 
@@ -84,99 +88,158 @@ Responsável pela transferência de valores entre contas da mesma instituição.
 
 ### Pré-requisitos
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8)
-- [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
+* .NET 8 SDK
+* Docker
+* Docker Compose
 
-### Subindo com Docker Compose
+### Docker Compose
 
 ```bash
-# Clone o repositório
-git clone https://github.com/seu-usuario/bankmore.git
-cd bankmore
-
-# Suba os containers
 docker-compose up --build
 ```
 
-### Acessando os Swaggers
+### Swagger
 
-| Serviço | URL |
-|---|---|
-| ContaCorrente API | http://localhost:7001/swagger |
-| Transferencia API | http://localhost:7002/swagger |
-
-### Executando localmente (sem Docker)
-
-```bash
-# ContaCorrente
-cd src/Services/ContaCorrente/ContaCorrente.API
-dotnet run
-
-# Transferencia (em outro terminal)
-cd src/Services/Transferencia/Transferencia.API
-dotnet run
-```
+* Conta Corrente: [http://localhost:7001/swagger](http://localhost:7001/swagger)
+* Transferência: [http://localhost:7002/swagger](http://localhost:7002/swagger)
 
 ---
 
 ## Variáveis de Ambiente
 
-| Variável | Descrição | Exemplo |
-|---|---|---|
-| `Jwt__Key` | Chave secreta para geração do JWT | `minha-chave-secreta` |
-| `ConnectionStrings__DefaultConnection` | String de conexão SQLite | `Data Source=/data/banco.db` |
-| `Services__ContaCorrente__BaseUrl` | URL base da API ContaCorrente | `http://contacorrente-api` |
+| Variável                             | Descrição    |
+| ------------------------------------ | ------------ |
+| Jwt__Key                             | Chave JWT    |
+| ConnectionStrings__DefaultConnection | Banco SQLite |
 
 ---
 
-## Infraestrutura (Produção)
-
-O projeto inclui manifestos Kubernetes prontos para deploy em produção:
+## Infraestrutura Kubernetes
 
 ```bash
-# Aplicar todos os manifestos
-kubectl apply -f k8s/jwt-secret.yaml
-kubectl apply -f k8s/contacorrente-pvc.yaml
-kubectl apply -f k8s/transferencia-pvc.yaml
-kubectl apply -f k8s/contacorrente-deployment.yaml
-kubectl apply -f k8s/transferencia-deployment.yaml
+kubectl apply -f k8s/
 ```
 
-Cada microsserviço roda com **mínimo de 2 réplicas** garantindo alta disponibilidade.
+Cada serviço roda com **2 réplicas**.
 
 ---
 
 ## Regras de Negócio
 
-### Movimentação
-- Apenas contas **cadastradas** podem receber movimentação (`INVALID_ACCOUNT`)
-- Apenas contas **ativas** podem receber movimentação (`INACTIVE_ACCOUNT`)
-- Apenas **valores positivos** são aceitos (`INVALID_VALUE`)
-- Apenas os tipos **Crédito (C)** ou **Débito (D)** são aceitos (`INVALID_TYPE`)
-- Apenas **Crédito** é permitido para contas diferentes da conta logada (`INVALID_TYPE`)
+### Conta Corrente
+
+* Apenas contas válidas podem operar
+* Apenas valores positivos
 
 ### Transferência
-- Realiza **débito** na conta de origem
-- Realiza **crédito** na conta de destino
-- Em caso de falha no crédito, realiza **estorno automático** na conta de origem
-- Requisições são **idempotentes** via `requisicaoId`
+
+* Débito + crédito atômico
+* Estorno automático em falhas
+* Idempotência via `requisicaoId`
 
 ---
 
 ## Fluxo de Transferência
 
-Cliente
-│
-▼
-Transferencia API
-├── Débito → ContaCorrente API ✓
-├── Crédito → ContaCorrente API ✓
-│     └── Falha → Estorno → ContaCorrente API
-└── Persiste registro da transferência
+Cliente → Transferencia API → Conta Corrente API → Persistência → Estorno (se necessário)
 
 ---
 
-## Licença
+# 🐳 Docker & Kubernetes (Containerização e Deploy)
 
-Este projeto foi desenvolvido como desafio técnico para a **BankMore Fintech**.
+O projeto BankMore foi preparado para execução em ambientes containerizados utilizando **Docker** e orquestrado via **Kubernetes**, garantindo escalabilidade e alta disponibilidade.
+
+---
+
+## 📦 Containerização com Docker
+
+Cada microsserviço possui sua própria imagem Docker baseada em build multi-stage.
+
+```text
+src/Services/ContaCorrente/ContaCorrente.API
+src/Services/Transferencia/Transferencia.API
+```
+
+Dockerfiles:
+
+```text
+docker/conta-corrente/Dockerfile
+docker/transferencia/Dockerfile
+```
+
+---
+
+## 🚀 Build das imagens
+
+```bash
+docker build -f docker/conta-corrente/Dockerfile -t mj2rsdockerpass/conta-corrente:latest .
+docker build -f docker/transferencia/Dockerfile -t mj2rsdockerpass/transferencia:latest .
+```
+
+---
+
+## 📤 Publicação das imagens
+
+```bash
+docker login
+docker push mj2rsdockerpass/conta-corrente:latest
+docker push mj2rsdockerpass/transferencia:latest
+```
+
+---
+
+## ☸️ Kubernetes
+
+* 2 réplicas por serviço
+* Service Discovery interno
+* Load balancing automático
+
+Estrutura:
+
+```text
+k8s/
+├── deployments
+├── services
+├── ingress
+```
+
+---
+
+## 🔁 Deploy
+
+```bash
+kubectl apply -f k8s/
+```
+
+---
+
+## 🌐 Ingress
+
+```text
+http://bankmore.local/conta
+http://bankmore.local/transferencia
+```
+
+---
+
+## ⚙️ Arquitetura
+
+Usuário → Ingress → Service → Pod → API
+
+---
+
+## 📈 Escalabilidade
+
+* 2 réplicas mínimas
+* balanceamento automático
+* isolamento por container
+
+---
+
+## 🔥 Benefícios
+
+* Alta disponibilidade
+* Escalabilidade horizontal
+* Deploy independente
+* Isolamento de falhas
+* Ambiente padronizado
