@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: conta-corrente
+  namespace: banco
 spec:
   replicas: 2
   selector:
@@ -15,5 +16,6 @@ spec:
       containers:
         - name: conta-corrente
           image: mj2rsdockerpass/conta-corrente:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80

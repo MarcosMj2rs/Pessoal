@@ -20,12 +20,7 @@ namespace Transferencia.Infrastructure.Repositories
 
             using var connection = _connectionFactory.CreateConnection();
 
-            var sqlBusca = @"SELECT idcontacorrente FROM contacorrente WHERE numero = @Numero";
-
-            var idContaOrigem = await connection.QueryFirstOrDefaultAsync<string>(sqlBusca, new { Numero = command.NumeroContaOrigem });
-            var idContaDestino = await connection.QueryFirstOrDefaultAsync<string>(sqlBusca, new { Numero = command.NumeroContaDestino });
-
-            if (idContaOrigem is null || idContaDestino is null)
+            if (command.NumeroContaOrigem == 0 || command.NumeroContaDestino == 0)
                 throw new InvalidOperationException("Conta origem ou destino não encontrada.");
 
             var sqlInsert = @$"INSERT INTO transferencia
@@ -48,8 +43,8 @@ namespace Transferencia.Infrastructure.Repositories
             await connection.ExecuteAsync(sqlInsert, new
             {
                 RequisicaoId = command.RequisicaoId.ToString(),
-                IdContaOrigem = idContaOrigem,
-                IdContaDestino = idContaDestino,
+                IdContaOrigem = command.NumeroContaOrigem,
+                IdContaDestino = command.NumeroContaDestino,
                 Data = command.Data,
                 Valor = command.Valor
             });

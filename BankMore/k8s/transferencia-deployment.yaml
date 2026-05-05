@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: transferencia
+  namespace: banco
 spec:
   replicas: 2
   selector:
@@ -15,5 +16,6 @@ spec:
       containers:
         - name: transferencia
           image: mj2rsdockerpass/transferencia:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80

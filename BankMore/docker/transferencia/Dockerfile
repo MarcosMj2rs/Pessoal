@@ -11,6 +11,9 @@ FROM mcr.microsoft.com/dotnet/aspnet:10.0-preview
 WORKDIR /app
 COPY --from=build /out .
 
+# AQUI (copia o banco)
+COPY src/Services/contacorrente.db /app/contacorrente.db
+
 ENV ASPNETCORE_URLS=http://+:80
 
 ENTRYPOINT ["dotnet", "Transferencia.API.dll"]
