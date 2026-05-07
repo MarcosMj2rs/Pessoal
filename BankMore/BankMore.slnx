@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/Solution Items/">
     <File Path=".gitignore" />
+    <File Path="DOCKER_README.txt" />
     <File Path="README.md" />
   </Folder>
   <Folder Name="/src/" />
@@ -15,6 +16,11 @@
     <Project Path="src/Services/ContaCorrente/ContaCorrente.Domain/ContaCorrente.Domain.csproj" />
     <Project Path="src/Services/ContaCorrente/ContaCorrente.Infrastructure/ContaCorrente.Infrastructure.csproj" />
     <Project Path="src/Services/ContaCorrente/ContaCorrente.Tests/ContaCorrente.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/Tarifas/">
+    <Project Path="src/Services/Tarifas/Tarifas.API/Tarifas.API.csproj" />
+    <Project Path="src/Services/Tarifas/Tarifas.Application/Tarifas.Application.csproj" />
+    <Project Path="src/Services/Tarifas/Tarifas.Infrastructure/Tarifas.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/src/Services/Transferencia/">
     <Project Path="src/Services/Transferencia/Transferencia.API/Transferencia.API.csproj" />

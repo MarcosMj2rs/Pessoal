@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using Transferencia.Application.Interfaces;
 using Transferencia.Infrastructure.Clients;
+using Transferencia.Infrastructure.Messaging;
 using Transferencia.Infrastructure.Persistence;
 using Transferencia.Infrastructure.Repositories;
 using Transferencia.Infrastructure.Security;
@@ -47,6 +48,12 @@ builder.Services.AddSingleton(new DbConnectionFactory(
     builder.Configuration.GetConnectionString("DefaultConnection")
         ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")
 ));
+
+//KAfka
+builder.Services.AddSingleton<IKafkaProducer>(sp =>
+    new KafkaProducer(builder.Configuration["Kafka:BootstrapServers"]
+        ?? throw new InvalidOperationException("Kafka bootstrap servers not configured."))
+);
 
 builder.Services.AddSwaggerGen(options =>
 {

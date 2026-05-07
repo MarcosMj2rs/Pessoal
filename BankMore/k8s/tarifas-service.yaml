@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tarifas-service
+  namespace: banco
+spec:
+  selector:
+    app: tarifas
+  ports:
+    - port: 80
+      targetPort: 80

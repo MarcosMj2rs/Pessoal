@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tarifas
+  namespace: banco
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tarifas
+  template:
+    metadata:
+      labels:
+        app: tarifas
+    spec:
+      containers:
+        - name: tarifas
+          image: mj2rsdockerpass/tarifas:v1
+          ports:
+            - containerPort: 80
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Production"
