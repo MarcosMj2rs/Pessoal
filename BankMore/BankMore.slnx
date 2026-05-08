@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Images/">
+    <File Path="Arquitetura.png" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".gitignore" />
     <File Path="DOCKER_README.txt" />
