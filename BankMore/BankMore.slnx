@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/Images/">
     <File Path="Arquitetura.png" />
+    <File Path="Fluxo.png" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".gitignore" />
