@@ -307,7 +307,7 @@ Cada serviço roda com **2 réplicas**.
 
 ## Fluxo de Transferência
 
-Cliente → Transferencia API → Conta Corrente API → Persistência → Estorno (se necessário)
+![Fluxo de Transferência](https://raw.githubusercontent.com/MarcosMj2rs/Pessoal/master/BankMore/Fluxo.png)
 
 ---
 
