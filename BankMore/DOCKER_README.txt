@@ -129,6 +129,24 @@ Kafka - Subir no cluster
 	kubectl exec -it deployment/kafka -n banco -- kafka-topics --create --topic transferencias-realizadas --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
 	kubectl exec -it deployment/kafka -n banco -- kafka-topics --create --topic tarifacoes-realizadas --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
 
+==========================================================================
+..............Rebuild para subir Consumer em Conta Corrente...............	
+==========================================================================
+
+# 1. Build
+	docker build --no-cache -t mj2rsdockerpass/conta-corrente:v2 -f docker/conta-corrente/Dockerfile .
+
+# 2. Push
+	docker push mj2rsdockerpass/conta-corrente:v2
+
+# 3. Atualiza o deployment
+	kubectl set image deployment/conta-corrente conta-corrente=mj2rsdockerpass/conta-corrente:v2 -n banco
+
+# 4. Acompanha os logs
+	kubectl logs -f deployment/conta-corrente -n banco
+
+
+
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

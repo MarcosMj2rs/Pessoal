@@ -30,6 +30,10 @@ namespace ContaCorrente.Application.Handlers
 
         public async Task<Unit> Handle(MovimentarContaCommand request, CancellationToken cancellationToken)
         {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"[MovimentarContaHandler] - RequisicaoId: {request.RequisicaoId}, NumeroConta: {request.NumeroConta}, Valor: {request.Valor}, Tipo: {request.Tipo}");
+            Console.ResetColor();
+
             var contaIdStr = ObterContaIdAutenticado();
 
             var contaLogada = await _contaRepository.ObterPorIdAsync(contaIdStr)

@@ -1,6 +1,7 @@
 using ContaCorrente.API.Middlewares;
 using ContaCorrente.Application.Interfaces;
 using ContaCorrente.Domain.Interfaces;
+using ContaCorrente.Infrastructure.Messaging;
 using ContaCorrente.Infrastructure.Repositories;
 using ContaCorrente.Infrastructure.Secutity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -59,6 +60,14 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddScoped<IContaCorrenteRepository, ContaCorrenteRepository>();
 builder.Services.AddScoped<IMovimentoRepository, MovimentoRepository>();
 builder.Services.AddScoped<IIdempotenciaRepository, IdempotenciaRepository>();
+
+builder.Services.AddHostedService(sp => new KafkaConsumer(builder.Configuration["Kafka:BootstrapServers"]
+?? throw new InvalidOperationException("Kafka BootstrapServers not found."),
+    builder.Configuration["Kafka:TopicoConsumer"]
+        ?? throw new InvalidOperationException("Kafka TopicoConsumer not found."),
+    sp.GetRequiredService<IServiceScopeFactory>(),
+    sp.GetRequiredService<ILogger<KafkaConsumer>>()
+));
 
 var app = builder.Build();
 
