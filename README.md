@@ -219,7 +219,7 @@ Responsável pela transferência de valores entre contas da mesma instituição.
 
 | Tecnologia   | Finalidade                 |
 | ------------ | -------------------------- |
-| .NET 8       | Framework principal        |
+| .NET 10      | Framework principal        |
 | Dapper       | Acesso ao banco de dados   |
 | MediatR      | Padrão Mediator / CQRS     |
 | SQLite       | Banco de dados             |
